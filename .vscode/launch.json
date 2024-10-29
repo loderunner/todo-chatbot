@@ -11,7 +11,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--inspect"],
       "skipFiles": ["<node_internals>/**"],
-      "runtimeVersion": "22.5"
+      "runtimeVersion": "20"
     },
     {
       "name": "Launch Chrome",
