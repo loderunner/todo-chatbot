@@ -14,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <h1 className="text-6xl">Todo Chatbot</h1>
+        {children}
+      </body>
     </html>
   );
 }

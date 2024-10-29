@@ -1,3 +1,16 @@
+'use client';
+
+import TodoList from './_components/TodoList';
+import { useTodoList } from './_lib/useTodoList';
+
 export default function Page() {
-  return <h1>Hello World!</h1>;
+  const { todoList, addTodo, removeTodo, setTodo } = useTodoList();
+  return (
+    <TodoList
+      list={todoList}
+      onAddItem={() => addTodo('')}
+      onChangeItem={setTodo}
+      onRemoveItem={removeTodo}
+    />
+  );
 }
