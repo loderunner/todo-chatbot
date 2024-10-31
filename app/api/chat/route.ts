@@ -2,7 +2,7 @@ import Ajv, { JSONSchemaType } from 'ajv';
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-import { TodoList, todoItemSchema, todoListSchema } from '@/_lib/todo-list';
+import { TodoList, todoItemSchema, todoListSchema } from '@/_store/todo';
 
 type Body = {
   context: TodoList;
@@ -28,27 +28,32 @@ export async function POST(req: Request): Promise<Response> {
     return new NextResponse(`Invalid payload: ${validateBody.errors}`);
   }
 
-  const chat = await openAI.chat.completions.create({
-    model: 'gpt-4o-mini',
-    messages: [
-      {
-        role: 'system',
-        content: `Given the following todo list in JSON format:
+  try {
+    const chat = await openAI.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content: `Given the following todo list in JSON format:
 \`\`\`json
 ${JSON.stringify(body.context, null, 2)}
 \`\`\`
 Accomplish the user's goals as best you can, using the provided functions.
 `,
-      },
-      {
-        role: 'user',
-        content: body.message,
-      },
-    ],
-    tools: [addTodoSchema, removeTodoSchema, updateTodoSchema],
-  });
+        },
+        {
+          role: 'user',
+          content: body.message,
+        },
+      ],
+      tools: [addTodoSchema, removeTodoSchema, updateTodoSchema],
+    });
 
-  return Response.json(chat);
+    return Response.json(chat);
+  } catch (err) {
+    console.error(err);
+    return new Response(null, { status: 500 });
+  }
 }
 
 const addTodoSchema: OpenAI.Chat.ChatCompletionTool = {
@@ -56,17 +61,17 @@ const addTodoSchema: OpenAI.Chat.ChatCompletionTool = {
   function: {
     name: 'addTodo',
     description: `/**
- * Add a todo item with the given \`label\` to the list.
+ * Add a todo item to the list.
  * 
- * @param label {string} - label of the todo item
+ * @param item {TodoItem} - todo item to add to the list
  */`,
     strict: true,
     parameters: {
       type: 'object',
       properties: {
-        label: { type: 'string' },
+        item: todoItemSchema,
       },
-      required: ['label'],
+      required: ['item'],
       additionalProperties: false,
     },
   },

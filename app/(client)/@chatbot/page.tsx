@@ -6,10 +6,10 @@ import { useCallback } from 'react';
 
 import Chatbot from './Chatbot';
 
-import { useTodoList } from '@/_lib/useTodoList';
+import useTodoList from '@/_lib/useTodoList';
 
 function ClientComponent() {
-  const { todoList, addTodo, removeTodo, updateTodo } = useTodoList();
+  const { todoList, addTodo, updateTodo, removeTodo } = useTodoList();
 
   const onSendMessage = useCallback(
     async (message: string) => {
@@ -28,13 +28,17 @@ function ClientComponent() {
           for (const call of choice.message.tool_calls ?? []) {
             const args = JSON.parse(call.function.arguments);
             if (call.function.name === 'addTodo') {
-              addTodo(args.label);
+              addTodo(args.item);
             } else if (call.function.name === 'removeTodo') {
               removeTodo(args.index);
             } else if (call.function.name === 'updateTodo') {
               updateTodo(args.index, args.item);
             }
           }
+        } else if (choice.finish_reason === 'stop') {
+          alert(choice.message.content);
+        } else if (choice.finish_reason === 'content_filter') {
+          alert(choice.message.refusal);
         }
       }
     },
