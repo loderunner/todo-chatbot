@@ -15,8 +15,9 @@ export default function Chatbot({ onSendMessage }: Props) {
   }, [message, onSendMessage]);
 
   return (
-    <div>
+    <div className="flex gap-2">
       <input
+        className="px-6 py-2 border-2 rounded-full flex-auto"
         type="text"
         value={message}
         onChange={(e) => setMessage(e.target.value)}

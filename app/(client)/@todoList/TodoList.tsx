@@ -8,13 +8,14 @@ type ItemProps = {
 
 function TodoListItem({ item, onChange, onRemove }: ItemProps) {
   return (
-    <div>
+    <div className="flex gap-1">
       <input
         type="checkbox"
         checked={item.done}
         onChange={() => onChange({ ...item, done: !item.done })}
       />
       <input
+        className="flex-auto"
         type="text"
         value={item.label}
         onChange={(e) => onChange({ ...item, label: e.target.value })}
@@ -38,7 +39,7 @@ export default function TodoList({
   onRemoveItem,
 }: Props) {
   return (
-    <div>
+    <div className="flex flex-col gap-2 p-2">
       {list.map((item, i) => (
         <TodoListItem
           item={item}
@@ -47,7 +48,9 @@ export default function TodoList({
           onRemove={() => onRemoveItem(i)}
         />
       ))}
-      <button onClick={onAddItem}>Add Todo</button>
+      <button className="self-center" onClick={onAddItem}>
+        Add Todo
+      </button>
     </div>
   );
 }
