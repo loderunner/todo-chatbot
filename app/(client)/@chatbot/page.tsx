@@ -27,6 +27,7 @@ function ClientComponent() {
         if (choice.finish_reason === 'tool_calls') {
           for (const call of choice.message.tool_calls ?? []) {
             const args = JSON.parse(call.function.arguments);
+
             if (call.function.name === 'addTodo') {
               addTodo(args.item);
             } else if (call.function.name === 'removeTodo') {
