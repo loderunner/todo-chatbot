@@ -1,30 +1,7 @@
-import Ajv, { JSONSchemaType } from 'ajv';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback } from 'react';
 
-export type TodoItem = {
-  label: string;
-  done: boolean;
-};
-
-const todoItemSchema: JSONSchemaType<TodoItem> = {
-  type: 'object',
-  properties: {
-    label: { type: 'string' },
-    done: { type: 'boolean' },
-  },
-  additionalProperties: false,
-  required: ['label', 'done'],
-};
-
-export type TodoList = TodoItem[];
-
-const todoListSchema: JSONSchemaType<TodoList> = {
-  type: 'array',
-  items: todoItemSchema,
-};
-
-const validateTodoList = new Ajv().compile(todoListSchema);
+import { TodoItem, TodoList, validate } from './todo-list';
 
 const localStorageKey = 'todo-list';
 
@@ -42,7 +19,7 @@ export function useTodoList() {
   } catch (_) {
     list = [];
   }
-  if (!validateTodoList(list)) {
+  if (!validate(list)) {
     list = [];
   }
 
@@ -51,6 +28,7 @@ export function useTodoList() {
       setListData(JSON.stringify([...list, { label, done: false }])),
     [list, setListData],
   );
+
   const removeTodo = useCallback(
     (index: number) =>
       setListData(
@@ -58,7 +36,8 @@ export function useTodoList() {
       ),
     [list, setListData],
   );
-  const setTodo = useCallback(
+
+  const updateTodo = useCallback(
     (index: number, todo: TodoItem) =>
       setListData(
         JSON.stringify([
@@ -74,6 +53,6 @@ export function useTodoList() {
     todoList: list,
     addTodo,
     removeTodo,
-    setTodo,
+    updateTodo,
   };
 }

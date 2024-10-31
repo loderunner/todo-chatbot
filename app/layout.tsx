@@ -8,15 +8,15 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  todoList,
+  chatbot,
+}: Readonly<{ todoList: React.ReactNode; chatbot: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>
         <h1 className="text-6xl">Todo Chatbot</h1>
-        {children}
+        {todoList}
+        {chatbot}
       </body>
     </html>
   );
