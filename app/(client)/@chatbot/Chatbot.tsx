@@ -1,3 +1,4 @@
+import { ChatBubbleLeftIcon } from '@heroicons/react/24/solid';
 import { useCallback, useMemo, useState } from 'react';
 
 export type Props = {
@@ -42,8 +43,12 @@ export default function Chatbot({ onSendMessage }: Props) {
           }
         }}
       ></textarea>
-      <button onClick={onClick} disabled={!enabled}>
-        Send
+      <button
+        className="rounded-full aspect-square"
+        onClick={onClick}
+        disabled={!enabled}
+      >
+        <ChatBubbleLeftIcon className="size-6" />
       </button>
     </div>
   );

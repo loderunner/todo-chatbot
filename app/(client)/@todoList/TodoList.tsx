@@ -1,3 +1,5 @@
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
+
 import { TodoItem, TodoList as TodoListType } from '@/_store/todo';
 
 type ItemProps = {
@@ -20,7 +22,9 @@ function TodoListItem({ item, onChange, onRemove }: ItemProps) {
         value={item.label}
         onChange={(e) => onChange({ ...item, label: e.target.value })}
       />
-      <button onClick={onRemove}>Delete</button>
+      <button className="rounded-full p-1" onClick={onRemove}>
+        <XMarkIcon className="size-5" />
+      </button>
     </div>
   );
 }
@@ -48,8 +52,8 @@ export default function TodoList({
           onRemove={() => onRemoveItem(i)}
         />
       ))}
-      <button className="self-center" onClick={onAddItem}>
-        Add Todo
+      <button className="self-center rounded-full p-2" onClick={onAddItem}>
+        <PlusIcon className="size-6" />
       </button>
     </div>
   );
