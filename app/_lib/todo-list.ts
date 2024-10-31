@@ -1,5 +1,4 @@
 import Ajv, { JSONSchemaType } from 'ajv';
-import OpenAI from 'openai';
 
 export type TodoItem = {
   label: string;

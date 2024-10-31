@@ -1,8 +1,8 @@
 import Ajv, { JSONSchemaType } from 'ajv';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-import { todoItemSchema, TodoList, todoListSchema } from '@/app/_lib/todo-list';
+import { TodoList, todoItemSchema, todoListSchema } from '@/_lib/todo-list';
 
 type Body = {
   context: TodoList;

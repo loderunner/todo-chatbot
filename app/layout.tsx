@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { ReactNode } from 'react';
 
 import './globals.css';
 
@@ -8,15 +9,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  todoList,
-  chatbot,
-}: Readonly<{ todoList: React.ReactNode; chatbot: React.ReactNode }>) {
+  children,
+}: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
       <body>
         <h1 className="text-6xl">Todo Chatbot</h1>
-        {todoList}
-        {chatbot}
+        {children}
       </body>
     </html>
   );

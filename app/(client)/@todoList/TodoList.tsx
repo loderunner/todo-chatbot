@@ -1,4 +1,4 @@
-import { TodoItem, TodoList as TodoListType } from '@/app/_lib/todo-list';
+import { TodoItem, TodoList as TodoListType } from '@/_lib/todo-list';
 
 type ItemProps = {
   item: TodoItem;

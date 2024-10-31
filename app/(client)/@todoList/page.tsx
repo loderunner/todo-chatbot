@@ -4,7 +4,7 @@ import { useIsClient } from '@uidotdev/usehooks';
 
 import TodoList from './TodoList';
 
-import { useTodoList } from '@/app/_lib/useTodoList';
+import { useTodoList } from '@/_lib/useTodoList';
 
 function ClientComponent() {
   const { todoList, addTodo, removeTodo, updateTodo } = useTodoList();
