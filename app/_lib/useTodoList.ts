@@ -1,8 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { TodoItem } from './todo';
-
 import { RootState } from '@/_store';
 import { actions } from '@/_store/todo';
 
@@ -11,22 +9,22 @@ export default function useTodoList() {
   const dispatch = useDispatch();
 
   const addTodo = useCallback(
-    (item: TodoItem) => {
-      dispatch(actions.addTodo(item));
+    ({ item }: Parameters<typeof actions.addTodo>[0]) => {
+      dispatch(actions.addTodo({ item }));
     },
     [dispatch],
   );
 
   const updateTodo = useCallback(
-    (index: number, item: TodoItem) => {
-      dispatch(actions.updateTodo({ index, item }));
+    ({ id, item }: Parameters<typeof actions.updateTodo>[0]) => {
+      dispatch(actions.updateTodo({ id, item }));
     },
     [dispatch],
   );
 
   const removeTodo = useCallback(
-    (index: number) => {
-      dispatch(actions.removeTodo(index));
+    ({ id }: Parameters<typeof actions.removeTodo>[0]) => {
+      dispatch(actions.removeTodo({ id }));
     },
     [dispatch],
   );

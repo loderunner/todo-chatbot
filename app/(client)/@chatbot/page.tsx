@@ -29,11 +29,11 @@ function ClientComponent() {
             const args = JSON.parse(call.function.arguments);
 
             if (call.function.name === 'addTodo') {
-              addTodo(args.item);
+              addTodo(args);
             } else if (call.function.name === 'removeTodo') {
-              removeTodo(args.index);
+              removeTodo(args);
             } else if (call.function.name === 'updateTodo') {
-              updateTodo(args.index, args.item);
+              updateTodo(args);
             }
           }
         } else if (choice.finish_reason === 'stop') {

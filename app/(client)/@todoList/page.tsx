@@ -12,9 +12,9 @@ function ClientComponent() {
   return (
     <TodoList
       list={todoList}
-      onAddItem={() => addTodo({ label: '', done: false })}
-      onChangeItem={updateTodo}
-      onRemoveItem={removeTodo}
+      onAddItem={() => addTodo({ item: { label: '', done: false } })}
+      onChangeItem={(item) => updateTodo({ id: item.id, item })}
+      onRemoveItem={(item) => removeTodo({ id: item.id })}
     />
   );
 }

@@ -1,6 +1,9 @@
-import Ajv, { JSONSchemaType } from 'ajv';
+import { JSONSchemaType } from 'ajv';
+
+import { ajv } from '@/ajv';
 
 export type TodoItem = {
+  id: string;
   label: string;
   done: boolean;
 };
@@ -8,11 +11,12 @@ export type TodoItem = {
 export const todoItemSchema: JSONSchemaType<TodoItem> = {
   type: 'object',
   properties: {
+    id: { type: 'string' },
     label: { type: 'string' },
     done: { type: 'boolean' },
   },
   additionalProperties: false,
-  required: ['label', 'done'],
+  required: ['id', 'label', 'done'],
 };
 
 export type TodoList = TodoItem[];
@@ -22,4 +26,4 @@ export const todoListSchema: JSONSchemaType<TodoList> = {
   items: todoItemSchema,
 };
 
-export const validate = new Ajv().compile(todoListSchema);
+export const validate = ajv.compile(todoListSchema);

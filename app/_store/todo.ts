@@ -3,16 +3,20 @@ import {
   createListenerMiddleware,
   createSlice,
   isAnyOf,
+  nanoid,
 } from '@reduxjs/toolkit';
 
 import { AppDispatch, RootState } from '.';
 
 import { TodoItem, TodoList, validate } from '@/_lib/todo';
 
-const defaultState: TodoList = [
-  { label: 'Read the docs', done: true },
-  { label: "Cross the T's", done: false },
-  { label: "Dot the i's", done: false },
+const idSize = 6;
+const itemId = () => nanoid(idSize);
+
+const defaultState: () => TodoList = () => [
+  { id: itemId(), label: 'Read the docs', done: true },
+  { id: itemId(), label: "Cross the T's", done: false },
+  { id: itemId(), label: "Dot the i's", done: false },
 ];
 
 const initialState: () => TodoList = () => {
@@ -22,7 +26,7 @@ const initialState: () => TodoList = () => {
 
   const data = localStorage.getItem('todo-list');
   if (data === null) {
-    return defaultState;
+    return defaultState();
   }
 
   try {
@@ -30,29 +34,38 @@ const initialState: () => TodoList = () => {
     if (validate(todoList)) {
       return todoList;
     }
-    return defaultState;
+    return defaultState();
   } catch (_) {
-    return defaultState;
+    return defaultState();
   }
 };
+
+export type ItemPayload = Omit<TodoItem, 'id'>;
 
 export const slice = createSlice({
   name: 'todoList',
   initialState,
   reducers: {
-    addTodo: (state, { payload: item }: PayloadAction<TodoItem>) => {
-      state.push(item);
+    addTodo: (
+      state,
+      { payload: { item } }: PayloadAction<{ item: ItemPayload }>,
+    ) => {
+      state.push({ ...item, id: itemId() });
     },
-    removeTodo: (state, { payload: index }: PayloadAction<number>) => {
-      state.splice(index, 1);
+    removeTodo: (state, { payload: { id } }: PayloadAction<{ id: string }>) => {
+      return state.filter((item) => item.id !== id);
     },
     updateTodo: (
       state,
       {
-        payload: { index, item },
-      }: PayloadAction<{ index: number; item: TodoItem }>,
+        payload: { id, item },
+      }: PayloadAction<{ id: string; item: ItemPayload }>,
     ) => {
-      state.splice(index, 1, item);
+      const index = state.findIndex((item) => item.id === id);
+      if (index === -1) {
+        return;
+      }
+      state[index] = { id, ...item };
     },
   },
 });

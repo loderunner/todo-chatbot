@@ -1,8 +1,11 @@
-import Ajv, { JSONSchemaType } from 'ajv';
+import { JSONSchemaType } from 'ajv';
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 import { TodoList, todoItemSchema, todoListSchema } from '@/_lib/todo';
+import { ToolSchemaType } from '@/_lib/tool-schema';
+import { actions } from '@/_store/todo';
+import { ajv } from '@/ajv';
 
 type Body = {
   context: TodoList;
@@ -18,7 +21,7 @@ const bodySchema: JSONSchemaType<Body> = {
   additionalProperties: false,
   required: ['message'],
 };
-const validateBody = new Ajv().compile(bodySchema);
+const validateBody = ajv.compile(bodySchema);
 
 const openAI = new OpenAI();
 
@@ -56,7 +59,7 @@ Accomplish the user's goals as best you can, using the provided functions.
   }
 }
 
-const addTodoSchema: OpenAI.Chat.ChatCompletionTool = {
+const addTodoSchema: ToolSchemaType<typeof actions.addTodo> = {
   type: 'function',
   function: {
     name: 'addTodo',
@@ -69,7 +72,15 @@ const addTodoSchema: OpenAI.Chat.ChatCompletionTool = {
     parameters: {
       type: 'object',
       properties: {
-        item: todoItemSchema,
+        item: {
+          type: 'object',
+          properties: {
+            label: { type: 'string' },
+            done: { type: 'boolean' },
+          },
+          required: ['label', 'done'],
+          additionalProperties: false,
+        },
       },
       required: ['item'],
       additionalProperties: false,
@@ -77,22 +88,22 @@ const addTodoSchema: OpenAI.Chat.ChatCompletionTool = {
   },
 };
 
-const removeTodoSchema: OpenAI.Chat.ChatCompletionTool = {
+const removeTodoSchema: ToolSchemaType<typeof actions.removeTodo> = {
   type: 'function',
   function: {
     name: 'removeTodo',
     description: `/**
- * Remove the todo item at index \`index\` from the list.
+ * Remove the todo item with id \`id\` from the list.
  * 
- * @param index {number} - index of the todo item in the list
+ * @param id {string} - the id of the todo item in the list
  */`,
     strict: true,
     parameters: {
       type: 'object',
       properties: {
-        index: { type: 'integer' },
+        id: { type: 'string' },
       },
-      required: ['index'],
+      required: ['id'],
       additionalProperties: false,
     },
   },
@@ -103,19 +114,19 @@ const updateTodoSchema: OpenAI.Chat.ChatCompletionTool = {
   function: {
     name: 'updateTodo',
     description: `/**
- * Update the todo item at index \`index\` in the list with the data from \`item\`.
+ * Update the todo item with id \`id\` in the list with the data from \`item\`.
  * 
- * @param index {number} - index of the todo item in the list
+ * @param id {string} - the id of the todo item in the list
  * @param item {TodoItem} - item data to update with
  */`,
     strict: true,
     parameters: {
       type: 'object',
       properties: {
-        index: { type: 'integer' },
+        id: { type: 'string' },
         item: todoItemSchema,
       },
-      required: ['index', 'item'],
+      required: ['id', 'item'],
       additionalProperties: false,
     },
   },

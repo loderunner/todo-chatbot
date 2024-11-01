@@ -31,9 +31,9 @@ function TodoListItem({ item, onChange, onRemove }: ItemProps) {
 
 export type Props = {
   list: TodoListType;
-  onChangeItem: (i: number, item: TodoItem) => void;
+  onChangeItem: (item: TodoItem) => void;
   onAddItem: () => void;
-  onRemoveItem: (i: number) => void;
+  onRemoveItem: (item: TodoItem) => void;
 };
 
 export default function TodoList({
@@ -48,8 +48,8 @@ export default function TodoList({
         <TodoListItem
           item={item}
           key={i}
-          onChange={(newItem) => onChangeItem(i, newItem)}
-          onRemove={() => onRemoveItem(i)}
+          onChange={(newItem) => onChangeItem(newItem)}
+          onRemove={() => onRemoveItem(item)}
         />
       ))}
       <button className="self-center rounded-full p-2" onClick={onAddItem}>
