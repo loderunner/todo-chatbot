@@ -30,9 +30,9 @@ export default function Chatbot({ onSendMessage }: Props) {
   }, [enabled, message, onSendMessage]);
 
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center gap-2">
       <textarea
-        className="px-6 py-2 border-2 rounded-full flex-auto resize-none disabled:text-slate-400"
+        className="min-h-11 flex-auto resize-none rounded-3xl border-2 px-6 py-2 disabled:text-slate-400"
         rows={rows}
         value={message}
         disabled={!enabled}
@@ -44,10 +44,11 @@ export default function Chatbot({ onSendMessage }: Props) {
         }}
       ></textarea>
       <button
-        className="rounded-full aspect-square"
+        className="aspect-square rounded-full p-2"
         onClick={onClick}
         disabled={!enabled}
       >
+        {' '}
         <ChatBubbleLeftIcon className="size-6" />
       </button>
     </div>

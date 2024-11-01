@@ -13,7 +13,7 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      <body className="flex w-screen h-screen p-6">
+      <body className="flex h-screen w-screen p-6">
         <div className="flex flex-col gap-6">
           <h1 className="text-6xl">Todo Chatbot</h1>
           {children}
