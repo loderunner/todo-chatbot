@@ -4,33 +4,10 @@ import {
   createSlice,
   isAnyOf,
 } from '@reduxjs/toolkit';
-import Ajv, { JSONSchemaType } from 'ajv';
 
 import { AppDispatch, RootState } from '.';
 
-export type TodoItem = {
-  label: string;
-  done: boolean;
-};
-
-export const todoItemSchema: JSONSchemaType<TodoItem> = {
-  type: 'object',
-  properties: {
-    label: { type: 'string' },
-    done: { type: 'boolean' },
-  },
-  additionalProperties: false,
-  required: ['label', 'done'],
-};
-
-export type TodoList = TodoItem[];
-
-export const todoListSchema: JSONSchemaType<TodoList> = {
-  type: 'array',
-  items: todoItemSchema,
-};
-
-export const validate = new Ajv().compile(todoListSchema);
+import { TodoItem, TodoList, validate } from '@/_lib/todo';
 
 const defaultState: TodoList = [
   { label: 'Read the docs', done: true },
@@ -39,6 +16,10 @@ const defaultState: TodoList = [
 ];
 
 const initialState: () => TodoList = () => {
+  if (typeof window === 'undefined') {
+    return [];
+  }
+
   const data = localStorage.getItem('todo-list');
   if (data === null) {
     return defaultState;

@@ -1,8 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { TodoItem } from './todo';
+
 import { RootState } from '@/_store';
-import { TodoItem, actions } from '@/_store/todo';
+import { actions } from '@/_store/todo';
 
 export default function useTodoList() {
   const todoList = useSelector((state: RootState) => state.todo);

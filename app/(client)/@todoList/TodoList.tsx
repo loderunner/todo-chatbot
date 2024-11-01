@@ -1,6 +1,6 @@
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
-import { TodoItem, TodoList as TodoListType } from '@/_store/todo';
+import { TodoItem, TodoList as TodoListType } from '@/_lib/todo';
 
 type ItemProps = {
   item: TodoItem;
